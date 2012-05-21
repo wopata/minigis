@@ -1,0 +1,19 @@
+class Foo < ActiveRecord::Base
+  # With column names "lat" and "lng", and
+  # virtual distance column name "distance"
+  acts_as_location
+end
+
+class Bar < ActiveRecord::Base
+  acts_as_location :latitude, :longitude, :dist
+end
+
+# Operations:
+
+Foo.origin(lat, lng).where('name = ?', 'John').limit(2) # ...
+Foo.where('name = ?', 'John').origin(lat, lng).limit(2) # ...
+Foo.origin(lat, lng, :within => 3, :order => :desc).limit(2) # ...
+
+# Geokit methods work:
+
+Foo.find(1).distance_from Foo.find(2)
